@@ -9,7 +9,13 @@ from tqdm import tqdm
 
 
 NASA_URL = "https://data.nasa.gov"
-DATASETS_URL = "https://data.nasa.gov/dataset/"
+DATASETS_URL = "https://data.nasa.gov/dataset"
+
+session = requests.Session()
+session.headers.update({
+    "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64)",
+    "Accept-Language": "en-US,en;q=0.9"
+})
 
 
 def parse_args():
@@ -35,8 +41,9 @@ def parse_args():
 
 
 def get_soup(url):
-    response = requests.get(url)
+    response = session.get(url, timeout=15)
     response.raise_for_status()
+    time.sleep(1.5)
     return BeautifulSoup(response.text, "html.parser")
 
 
@@ -45,10 +52,10 @@ def collect_dataset_urls(tag):
 
     search_url = f"{DATASETS_URL}/?tags={tag}"
     soup = get_soup(search_url)
-    max_pages = 2 # int(soup.find_all(class_="page-link")[-2].text) TODO
+    max_pages = int(soup.find_all(class_="page-link")[-2].text)
+    print("\nCollecting dataset urls...")
 
-    for page in range(1, max_pages+1):
-        time.sleep(1)
+    for page in tqdm(range(1, max_pages+1)):
         search_url = f"{DATASETS_URL}/?tags={tag}&page={page}"
         soup = get_soup(search_url)
 
@@ -59,7 +66,6 @@ def collect_dataset_urls(tag):
 
 
 def collect_record(url, path):
-    time.sleep(1)
     data = {
         "dataset_url":url, 
         "title": None,
@@ -116,7 +122,7 @@ def main():
     dataset_urls = collect_dataset_urls(tag)
     print(f"Number of collected dataset urls: {len(dataset_urls)}")
 
-    for dataset in tqdm(dataset_urls[:2]):
+    for dataset in tqdm(dataset_urls):
         collect_record(dataset, output_file)
 
 
