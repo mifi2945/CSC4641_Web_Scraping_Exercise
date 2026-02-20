@@ -10,3 +10,4 @@ There were a few unclear instructions within the directions given on Canvas. Som
 
 
 # Issues
+A big big issue was that even during initial testing with getting a request just to the listing page, the requests would consistently time-out, making it near impossible to test or collect any data.
