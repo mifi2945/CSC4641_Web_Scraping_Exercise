@@ -1,5 +1,18 @@
 # How to Run
+```
+usage: crawl.py [-h] --tag TAG --out OUT
 
+Scrape NASA by tag.
+
+options:
+  -h, --help  show this help message and exit
+  --tag TAG   Tag to filter datasets
+  --out OUT   Output JSONL file path
+```
+
+Note the OUT has to have the `.jsonl` extension. **If the file already exists, the program will prompt if you want to continue**:
+- y: **will overwrite the existing file**
+- n: will terminate the program without overwriting
 
 # Assumptions
 There were a few unclear instructions within the directions given on Canvas. Some of these are now assumptions:
@@ -10,4 +23,4 @@ There were a few unclear instructions within the directions given on Canvas. Som
 
 
 # Issues
-A big big issue was that even during initial testing with getting a request just to the listing page, the requests would consistently time-out, making it near impossible to test or collect any data.
+A big big issue was that even during initial testing with getting a request just to the listing page, the requests would consistently time-out, making it near impossible to test or collect any data. This further elongated the collection process.
