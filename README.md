@@ -25,4 +25,4 @@ There were a few unclear instructions within the directions given on Canvas. Som
 # Issues
 A big big issue was that even during initial testing with getting a request just to the listing page, the requests would consistently time-out, making it near impossible to test or collect any data. This further elongated the collection process.
 
-Needed to make a `session` for the requests so that the NASA website wasn't rate-limiting the requests.
+Needed to make a `session` for the requests so that the NASA website wasn't rate-limiting the requests. The program may need to be started multiple times if it keeps crashing.

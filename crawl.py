@@ -10,6 +10,7 @@ from tqdm import tqdm
 
 NASA_URL = "https://data.nasa.gov"
 DATASETS_URL = "https://data.nasa.gov/dataset"
+titles_seen = []
 
 session = requests.Session()
 session.headers.update({
@@ -85,12 +86,16 @@ def collect_record(url, path):
             class_="module-content"
             )
     data["title"] = main_text.find("h1").text
+    if data["title"] in titles_seen:
+        return
+    titles_seen.append(data["title"])
+
     data["description"] = main_text.find(class_="notes embedded-content").find("p").text
     data["tags"].extend([tag["title"] for tag in main_text.find_all("a", class_="tag")])
     
-    if main_text.find("p", class_="empty") != None:
+    if main_text.find("p", class_="empty") == None:
         data["resource_links"].extend(
-            [resource["href"] for resource in main_text.find_all("a", class_="heading")]
+            [NASA_URL+resource["href"] for resource in main_text.find_all("a", class_="heading")]
             )
     
     landing_page = main_text.find("th", string="landingPage")
@@ -124,6 +129,8 @@ def main():
 
     for dataset in tqdm(dataset_urls):
         collect_record(dataset, output_file)
+    
+    print(f"\nCollected {len(titles_seen)} non-duplicates of total {len(dataset_urls)}")
 
 
 if __name__ == "__main__":
